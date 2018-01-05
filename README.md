@@ -8,63 +8,63 @@ Restaurants produce food in abundance to meet their demands. Some of this food g
 ## Problem Set-up
  ---
 We model this as a sequential decision modelling problem where we implement 3 policies.
-The span of this problem occurs over a 12 hour day where we are the food bank in charge of allocating food resources to multiple tie-ups. Each tie-up has it's own demand ($D_t$) which we know the forecast of.
+The span of this problem occurs over a 12 hour day where we are the food bank in charge of allocating food resources to multiple tie-ups. Each tie-up has it's own demand (D_t) which we know the forecast of.
 
-Over the 12 hour day, we send out food to one tie-up in one hour. Therefore, we have 12 tie-ups to send food out to. We have $R_0$ amount of food in our storage initially that keeps decreasing as we keep sending the food out.
+Over the 12 hour day, we send out food to one tie-up in one hour. Therefore, we have 12 tie-ups to send food out to. We have R_0 amount of food in our storage initially that keeps decreasing as we keep sending the food out.
 Problem sequence:
-1. Collect food amount $R_0$ from restaurants at night and store in food bank storage units.   
+1. Collect food amount R_0 from restaurants at night and store in food bank storage units.   
 2. In the morning, the 12 hour day starts.
-3. At $t=0$, allot food amount $x_t$ to the first tie-up '$t_1$'where food is distributed throughout the hour.
+3. At t=0, allot food amount x_t to the first tie-up 't_1'where food is distributed throughout the hour.
    (The demand is not known until the end of the hour)
-4. Once the first hour is up, at $t=t+1$, send out $x_{t+1}$ to the next tie-up and so on....    
+4. Once the first hour is up, at t=t+1, send out x_{t+1} to the next tie-up and so on....    
 
-Note: Keep updating the amount of food you have in storage as $R_{t+1}$ = $R_t$ - $x_t$
+Note: Keep updating the amount of food you have in storage as R_{t+1} = R_t - x_t
 
 But there is a catch to this problem!! You can only send out food that is **fresh**. 
-To quantify freshness, we introduce a freshness factor $f_F$ where $F= A,B$
+To quantify freshness, we introduce a freshness factor f_F where F= A,B
 We assume there to be 2 kinds of food in the storage.
 1. Type A is the kind of food that deteriorates faster with time.
 2. Type B is the kind of food that deteriorates with time but at a rate that is much slower than type A.
 
-$f_{F,t+1}$ = $f_{F,t}$ - $E_{F,t+1}$
+f_{F,t+1} = f_{F,t} - E_{F,t+1}
 
-where $E_{F,t+1}$ is a decreasing function.
+where E_{F,t+1} is a decreasing function.
 The rates at which type A and B deteriorate are:
 
-$E_{A,t+1}$ = {1,5,10} 
+E_{A,t+1} = {1,5,10} 
 
-$E_{B,t+1}$ = {1,2,3}
+E_{B,t+1} = {1,2,3}
 
-The decreasing function $E_{F,t+1}$ can take on any of the 3 values with equal probability.
-We start off by assuming the food in storage initially is $f_F$ = 500 for both type A and B. This value decreases as every hour passes. 
+The decreasing function E_{F,t+1} can take on any of the 3 values with equal probability.
+We start off by assuming the food in storage initially is f_F = 500 for both type A and B. This value decreases as every hour passes. 
 
 ## Modelling the problem
 ---
-*State variables*: $R_A$ , $R_B$ , $f_A$ , $f_B$
+*State variables*: R_A , R_B , f_A , f_B
 
-*Exogenous information*: $E_A$ , $E_B$ , $D$
+*Exogenous information*: E_A , E_B , D
 
 *Transition function*: 
 
-$R_{F,t+1}$ = $R_{F,t}$ - $x_{F,t}$
+R_{F,t+1} = R_{F,t} - x_{F,t}
                        
-$f_{F,t+1}$ = $f_{F,t}$ - $E_{F,t+1}$
+f_{F,t+1} = f_{F,t} - E_{F,t+1}
 
 where F = A,B
  
 *Decision variables*: 
 
-Decision 1: How much quantitiy of food to send to one tie-up? $x_t$ = ?
+Decision 1: How much quantitiy of food to send to one tie-up? x_t = ?
 
-Decision 2: How much of it should be type A and type B? $x_{A,t}$ = ?   $x_{B,t}$ = ? 
+Decision 2: How much of it should be type A and type B? x_{A,t} = ?   x_{B,t} = ? 
 
 *Constraints*: 
 
 For F= A,B
 
-$x_F$ <= $R_F$........*you can only send as much as you have*
+x_F <= R_F........*you can only send as much as you have*
 
-$f_F$ > 0 ............*you can only serve fresh food, i.e, if freshness factor becomes 0, the food must be thrown away*
+f_F > 0 ............*you can only serve fresh food, i.e, if freshness factor becomes 0, the food must be thrown away*
 
 
 
